@@ -83,28 +83,36 @@ class _StepsTabState extends State<StepsTab> {
   }
 
   void startTimer(BuildContext context) {
-    final appState = Provider.of<AppState>(context, listen: false);
-    final difference = appState.endDate!.difference(DateTime.now());
+  final appState = Provider.of<AppState>(context, listen: false);
+  final difference = appState.endDate!.difference(DateTime.now());
 
-    if (difference.inSeconds > 0) {
+  if (difference.inSeconds > 0) {
+    if (!mounted) return; 
+    setState(() {
+      _timeRemaining = difference;
+    });
+
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel(); 
+        return;
+      }
+
       setState(() {
-        _timeRemaining = difference;
+        if (_timeRemaining.inSeconds > 0) {
+          _timeRemaining = _timeRemaining - Duration(seconds: 1);
+        } else {
+          _timer?.cancel();
+        }
       });
-      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-        setState(() {
-          if (_timeRemaining.inSeconds > 0) {
-            _timeRemaining = _timeRemaining - Duration(seconds: 1);
-          } else {
-            _timer?.cancel();
-          }
-        });
-      });
-    } else {
-      setState(() {
-        _timeRemaining = Duration.zero;
-      });
-    }
+    });
+  } else {
+    if (!mounted) return;
+    setState(() {
+      _timeRemaining = Duration.zero;
+    });
   }
+}
 
   bool get isTimerComplete => _timeRemaining.inSeconds == 0;
 
