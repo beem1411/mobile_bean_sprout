@@ -49,38 +49,76 @@ class AuthController {
     }
   }
   
-  Future<void> loginUser(BuildContext context) async {
-    const String url = 'http://210.246.215.73:4000/login';
+  // Future<void> loginUser(BuildContext context) async {
+  //   const String url = 'http://210.246.215.73:4000/login';
 
-    final Map<String, String> requestData = {
-      'email': emailEditingController.text,
-      'password': passwordEditingController.text
-    };
+  //   final Map<String, String> requestData = {
+  //     'email': emailEditingController.text,
+  //     'password': passwordEditingController.text
+  //   };
 
-    try {
-      final http.Response response = await http.post(
-        Uri.parse(url),
-        headers: <String, String>{'Content-Type': 'application/json'},
-        body: jsonEncode(requestData),
+  //   try {
+  //     final http.Response response = await http.post(
+  //       Uri.parse(url),
+  //       headers: <String, String>{'Content-Type': 'application/json'},
+  //       body: jsonEncode(requestData),
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       loggedInUserEmail = emailEditingController.text;
+  //       await fetchUserData(); // Fetch user data after successful login
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => HomeScreen()),
+  //       );
+  //       print('Login successful');
+  //       print('${loggedInUserEmail}');
+
+  //     } else {
+  //       print('Failed to Login: ${response.statusCode}');
+  //     }
+  //   } catch (error) {
+  //     print('Error: $error');
+  //   }
+  // }
+
+Future<bool> loginUser(BuildContext context) async {
+  const String url = 'http://210.246.215.73:4000/login';
+
+  final Map<String, String> requestData = {
+    'email': emailEditingController.text,
+    'password': passwordEditingController.text
+  };
+
+  try {
+    final http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{'Content-Type': 'application/json'},
+      body: jsonEncode(requestData),
+    );
+
+    if (response.statusCode == 200) {
+      loggedInUserEmail = emailEditingController.text;
+      await fetchUserData(); // ดึงข้อมูลผู้ใช้หลังจากเข้าสู่ระบบสำเร็จ
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
       );
-
-      if (response.statusCode == 200) {
-        loggedInUserEmail = emailEditingController.text;
-        await fetchUserData(); // Fetch user data after successful login
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-        print('Login successful');
-        print('${loggedInUserEmail}');
-
-      } else {
-        print('Failed to Login: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Error: $error');
+      print('Login successful');
+      return true; // ✅ เข้าสู่ระบบสำเร็จ
+    } else if (response.statusCode == 401) {
+      print('Incorrect password');
+      return false; // ❌ รหัสผ่านผิด
+    } else {
+      print('Login failed: ${response.statusCode}');
+      return false;
     }
+  } catch (error) {
+    print('Error: $error');
+    return false;
   }
+}
+
 
   Future<void> fetchUserData() async {
     if (loggedInUserEmail != null) {

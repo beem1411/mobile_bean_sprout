@@ -81,9 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
         index: currentPageIndex,
         children: [
           HomeTab(), // แถบเมนู "หน้าหลัก"
-          HistoryTab(
-              //history: [],
-              ), // แถบเมนู "ประวัติ"
+          HistoryTab(), // แถบเมนู "ประวัติ"
           ProfileTab(
             authController: authController,
           ), // แถบเมนู "โปรไฟล์"

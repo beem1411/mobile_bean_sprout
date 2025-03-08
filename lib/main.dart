@@ -10,8 +10,6 @@ import 'package:provider/provider.dart';
 
 
 void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // NotificationService.initialize();
   runApp(
     MultiProvider(
       providers: [
@@ -36,7 +34,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: LoginScreen(), // ใช้ LoginScreen ตามเดิม
+      home: LoginScreen(),
     );
   }
 }

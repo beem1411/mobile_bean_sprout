@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constant/auth_controller.dart';
+import 'package:mobile/screens/login.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -56,49 +57,72 @@ class _RegisterScreenState extends State<RegisterScreen> {
         autofocus: false,
         controller: authController.emailEditingController,
         keyboardType: TextInputType.emailAddress,
-        // validator: (value) {} ,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "กรุณากรอกอีเมล";
+          } else if (!value.contains("@")) {
+            return "รูปแบบอีเมลไม่ถูกต้อง";
+          }
+          return null;
+        },
         onSaved: (value) {
           authController.emailEditingController.text = value!;
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.mail), //l/t/r/bt
+          prefixIcon: Icon(Icons.mail),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "อีเมล",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ));
-    // password field
+
     final passwordField = TextFormField(
         autofocus: false,
         controller: authController.passwordEditingController,
         obscureText: true,
-        // validator: (value) {} ,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "กรุณากรอกรหัสผ่าน";
+          } else if (value.length < 8) {
+            return "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร";
+          }
+          return null;
+        },
         onSaved: (value) {
           authController.passwordEditingController.text = value!;
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key), //l/t/r/bt
+          prefixIcon: Icon(Icons.vpn_key),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "รหัสผ่าน",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ));
-    // confirm password field
+
     final confirmPasswordField = TextFormField(
         autofocus: false,
         controller: authController.confirmPasswordEditingController,
         obscureText: true,
-        // validator: (value) {} ,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "กรุณายืนยันรหัสผ่าน";
+          } else if (value.length < 8) {
+            return "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร";
+          } else if (value != authController.passwordEditingController.text) {
+            return "รหัสผ่านไม่ตรงกัน";
+          }
+          return null;
+        },
         onSaved: (value) {
           authController.confirmPasswordEditingController.text = value!;
         },
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key), //l/t/r/bt
+          prefixIcon: Icon(Icons.vpn_key),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "ยืนยันรหัสผ่าน",
           border: OutlineInputBorder(
@@ -106,26 +130,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ));
 
-    final signUpButton = Material(
-      elevation: 5,
-      borderRadius: BorderRadius.circular(30),
-      color: Color.fromARGB(255, 108, 253, 132),
-      child: MaterialButton(
-        padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        minWidth: MediaQuery.of(context).size.width,
-        onPressed: () {
-          authController.registerUser();
-        },
-        child: Text(
-          "ลงทะเบียน",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: 20,
-              color: Color.fromARGB(255, 10, 0, 0),
-              fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
+final signUpButton = Material(
+  elevation: 5,
+  borderRadius: BorderRadius.circular(30),
+  color: Color.fromARGB(255, 108, 253, 132),
+  child: MaterialButton(
+    padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+    minWidth: MediaQuery.of(context).size.width,
+    onPressed: () {
+      if (_formkey.currentState!.validate()) {
+        authController.registerUser().then((_) {
+          // กลับไปที่หน้า LoginScreen หลังจากลงทะเบียนสำเร็จ
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+          );
+        }).catchError((error) {
+          // กรณีลงทะเบียนไม่สำเร็จ
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("ลงทะเบียนไม่สำเร็จ: $error")),
+          );
+        });
+      }
+    },
+    child: Text(
+      "ลงทะเบียน",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          fontSize: 20,
+          color: Color.fromARGB(255, 10, 0, 0),
+          fontWeight: FontWeight.bold),
+    ),
+  ),
+);
+
 
     return Scaffold(
       backgroundColor: Colors.white,

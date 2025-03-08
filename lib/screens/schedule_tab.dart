@@ -125,7 +125,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   onPressed: () async {
                     if (startDate != null && endDate != null) {
                       try {
-                        await historyController.saveHistory(
+                        await historyController.saveHistory( 
                           startDate: startDate!,
                           endDate: endDate!,
                           startTime: formatTime(startTime),
@@ -134,7 +134,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                           wateringPeriod: wateringPeriod,
                           round: round,
                           soakTime: soakTime,
-                          frequency : frequency,
+                          frequency: frequency,
                         );
                         // 🔹 บันทึกข้อมูลลง Provider
                         appState.updateSchedule(
@@ -334,7 +334,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
     }
   }
 
-    Future<void> _editFrequency() async {
+  Future<void> _editFrequency() async {
     int? fquency = await _showInputDialog(
         'กำหนดระยะห่างในการรดน้ำ', 'ระยะเวลา (ชั่วโมง)', frequency);
     if (fquency != null) {

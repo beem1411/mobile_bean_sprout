@@ -9,26 +9,32 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-// form key
-final _formkey = GlobalKey();
 // editing controller
 final authController = AuthController();
 
 class _LoginScreenState extends State<LoginScreen> {
+  // form key
+  final _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    // email field
     final emailField = TextFormField(
         autofocus: false,
         controller: authController.emailEditingController,
         keyboardType: TextInputType.emailAddress,
-        // validator: (value) {} ,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "กรุณากรอกอีเมล";
+          } else if (!value.contains("@")) {
+            return "รูปแบบอีเมลไม่ถูกต้อง";
+          }
+          return null;
+        },
         onSaved: (value) {
           authController.emailEditingController.text = value!;
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.mail), //l/t/r/bt
+          prefixIcon: Icon(Icons.mail),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "อีเมล",
           border: OutlineInputBorder(
@@ -36,18 +42,22 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ));
 
-    // password field
     final passwordField = TextFormField(
         autofocus: false,
         controller: authController.passwordEditingController,
         obscureText: true,
-        // validator: (value) {} ,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "กรุณากรอกรหัสผ่าน";
+          }
+          return null;
+        },
         onSaved: (value) {
           authController.passwordEditingController.text = value!;
         },
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key), //l/t/r/bt
+          prefixIcon: Icon(Icons.vpn_key),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "รหัสผ่าน",
           border: OutlineInputBorder(
@@ -62,12 +72,19 @@ class _LoginScreenState extends State<LoginScreen> {
       child: MaterialButton(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
-        /*onPressed: () { 
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomeScreen()));
-        },*/
-        onPressed: () {
-          authController.loginUser(context);
+        onPressed: () async {
+          if (_formkey.currentState!.validate()) {
+            bool success = await authController.loginUser(context);
+            if (!success) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("รหัสผ่านไม่ถูกต้อง"),
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            }
+          }
         },
         child: Text(
           "เข้าสู่ระบบ",

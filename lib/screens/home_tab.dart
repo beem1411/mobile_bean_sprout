@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/screens/login.dart';
 import 'add_device_page.dart';
 import '../widgets/device_tile.dart';
 import '../widgets/add_device_button.dart';
@@ -17,18 +18,34 @@ class _HomeTabState extends State<HomeTab> {
     devices = [AddDeviceButton(onTap: navigateToAddPage)];
   }
 
-  void navigateToAddPage() async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => AddDevicePage()),
-    );
+  // void navigateToAddPage() async {
+  //   final result = await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => AddDevicePage()),
+  //   );
 
-    if (result != null && result is String && result.isNotEmpty) {
-      setState(() {
-        devices.insert(devices.length - 1, DeviceTile(deviceName: result));
-      });
-    }
+  //   if (result != null && result is String && result.isNotEmpty) {
+  //     setState(() {
+  //       devices.insert(devices.length - 1, DeviceTile(deviceName: result));
+  //     });
+  //   }
+
+void navigateToAddPage() async {
+  final userId = authController.userData?['userId'] ?? 0; // ✅ ดึง userId
+
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => AddDevicePage(userId: userId), // ✅ ส่ง userId
+    ),
+  );
+
+  if (result != null && result is String && result.isNotEmpty) {
+    setState(() {
+      devices.insert(devices.length - 1, DeviceTile(deviceName: result));
+    });
   }
+}
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/constant/connection_controller.dart';
 
 class AddDevicePage extends StatelessWidget {
   final TextEditingController _controller = TextEditingController();
+  final ConnectionController cntController = ConnectionController();
+  final int userId; // รับค่า userId จากหน้า Login
+  AddDevicePage({required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +21,7 @@ class AddDevicePage extends StatelessWidget {
           children: [
             TextField(
               controller: _controller,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'ID ถังปลูก',
                 border: OutlineInputBorder(),
@@ -26,13 +31,35 @@ class AddDevicePage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 if (_controller.text.isNotEmpty) {
+                  cntController.addDeviceToServer(
+                    _controller.text, // tankId
+                    userId, // userId
+                  );
                   Navigator.pop(context, _controller.text); // ส่งค่ากลับ
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('กรุณากรอกชื่ออุปกรณ์')),
+                    SnackBar(content: Text('กรุณากรอกหมายเลขอุปกรณ์')),
                   );
                 }
               },
+              // onPressed: () {
+              //   if (_controller.text.isNotEmpty) {
+              //     int? tankId =
+              //         int.tryParse(_controller.text); // ✅ แปลงเป็น int
+              //     if (tankId != null) {
+              //       Navigator.pop(context, tankId); // ✅ ส่ง tankId กลับ
+              //     } else {
+              //       ScaffoldMessenger.of(context).showSnackBar(
+              //         SnackBar(
+              //             content: Text('กรุณากรอกหมายเลขถังปลูกให้ถูกต้อง')),
+              //       );
+              //     }
+              //   } else {
+              //     ScaffoldMessenger.of(context).showSnackBar(
+              //       SnackBar(content: Text('กรุณากรอก ID ถังปลูก')),
+              //     );
+              //   }
+              // },
               style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromARGB(255, 126, 255, 165)),
               child: Text('บันทึก'),

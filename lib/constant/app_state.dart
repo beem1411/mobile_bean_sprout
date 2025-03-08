@@ -13,7 +13,7 @@ class AppState extends ChangeNotifier {
   List<Map<String, dynamic>> history = [];
   int currentStep = 0;
   int soakTime = 0;
-  int frequeency = 0 ;
+  int frequeency = 0;
   Duration _stRemaining = Duration(seconds: 0);
   Timer? _timer;
   // int? savedAmountStart;
@@ -100,7 +100,7 @@ class AppState extends ChangeNotifier {
     wateringPeriod = newWateringPeriod;
     round = newRound;
     soakTime = newSoakTime;
-    newFrequency= newFrequency;
+    newFrequency = newFrequency;
 
     if (newRound > round) {
       currentStep = 0;
@@ -134,21 +134,20 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-
   final List<Map<String, String>> _notifications = [];
   bool _hasUnreadNotifications = false;
 
   List<Map<String, String>> get notifications => _notifications;
   bool get hasUnreadNotifications => _hasUnreadNotifications;
 
-void addNotification(String title, String subtitle) {
-  _notifications.insert(0, {'title': title, 'subtitle': subtitle});
-  _hasUnreadNotifications = true;
+  void addNotification(String title, String subtitle) {
+    _notifications.insert(0, {'title': title, 'subtitle': subtitle});
+    _hasUnreadNotifications = true;
 
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    notifyListeners();
-  });
-}
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
+  }
 
   void markNotificationsAsRead() {
     _hasUnreadNotifications = false;
@@ -160,4 +159,5 @@ void addNotification(String title, String subtitle) {
     _hasUnreadNotifications = false;
     notifyListeners();
   }
+
 }
