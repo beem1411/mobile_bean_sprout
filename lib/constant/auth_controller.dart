@@ -1,9 +1,8 @@
 import 'dart:convert';
-//import 'package:bean_sprout_test/screens/home.dart';
-//import 'package:bean_sprout_test/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/screens/home_screen.dart';
+import 'package:mobile/screens/login.dart';
 
 class AuthController {
   final firstNameEditingController = TextEditingController();
@@ -48,77 +47,74 @@ class AuthController {
       print('Error: $error');
     }
   }
-  
-  // Future<void> loginUser(BuildContext context) async {
-  //   const String url = 'http://210.246.215.73:4000/login';
 
-  //   final Map<String, String> requestData = {
-  //     'email': emailEditingController.text,
-  //     'password': passwordEditingController.text
-  //   };
+  Future<bool> loginUser(BuildContext context) async {
+    const String url = 'http://210.246.215.73:4000/login';
 
-  //   try {
-  //     final http.Response response = await http.post(
-  //       Uri.parse(url),
-  //       headers: <String, String>{'Content-Type': 'application/json'},
-  //       body: jsonEncode(requestData),
-  //     );
+    final Map<String, String> requestData = {
+      'email': emailEditingController.text,
+      'password': passwordEditingController.text
+    };
 
-  //     if (response.statusCode == 200) {
-  //       loggedInUserEmail = emailEditingController.text;
-  //       await fetchUserData(); // Fetch user data after successful login
-  //       Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => HomeScreen()),
-  //       );
-  //       print('Login successful');
-  //       print('${loggedInUserEmail}');
-
-  //     } else {
-  //       print('Failed to Login: ${response.statusCode}');
-  //     }
-  //   } catch (error) {
-  //     print('Error: $error');
-  //   }
-  // }
-
-Future<bool> loginUser(BuildContext context) async {
-  const String url = 'http://210.246.215.73:4000/login';
-
-  final Map<String, String> requestData = {
-    'email': emailEditingController.text,
-    'password': passwordEditingController.text
-  };
-
-  try {
-    final http.Response response = await http.post(
-      Uri.parse(url),
-      headers: <String, String>{'Content-Type': 'application/json'},
-      body: jsonEncode(requestData),
-    );
-
-    if (response.statusCode == 200) {
-      loggedInUserEmail = emailEditingController.text;
-      await fetchUserData(); // ดึงข้อมูลผู้ใช้หลังจากเข้าสู่ระบบสำเร็จ
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+    try {
+      final http.Response response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{'Content-Type': 'application/json'},
+        body: jsonEncode(requestData),
       );
-      print('Login successful');
-      return true; // ✅ เข้าสู่ระบบสำเร็จ
-    } else if (response.statusCode == 401) {
-      print('Incorrect password');
-      return false; // ❌ รหัสผ่านผิด
-    } else {
-      print('Login failed: ${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        loggedInUserEmail = emailEditingController.text;
+        await fetchUserData(); // ดึงข้อมูลผู้ใช้หลังจากเข้าสู่ระบบสำเร็จ
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+        print('Login successful');
+        return true; // ✅ เข้าสู่ระบบสำเร็จ
+      } else if (response.statusCode == 401) {
+        print('Incorrect password');
+        return false; // ❌ รหัสผ่านผิด
+      } else {
+        print('Login failed: ${response.statusCode}');
+        return false;
+      }
+    } catch (error) {
+      print('Error: $error');
       return false;
     }
-  } catch (error) {
-    print('Error: $error');
-    return false;
   }
-}
 
+Future<void> logout(BuildContext context) async {
+    final userId = userData?['userId'];
+    if (userId != null) {
+        try {
+            final response = await http.post(
+                Uri.parse('http://210.246.215.73:4000/logout'),
+                headers: {'Content-Type': 'application/json'},
+                body: jsonEncode({'userId': userId}),
+            );
+
+            if (response.statusCode == 200) {
+                print("✅ Logout สำเร็จ");
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+            } else {
+                print("❌ Logout ไม่สำเร็จ: ${response.body}");
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('ออกจากระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง')),
+                );
+            }
+        } catch (e) {
+            print("❌ เกิดข้อผิดพลาดระหว่างออกจากระบบ: $e");
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('เครือข่ายมีปัญหา กรุณาตรวจสอบอินเทอร์เน็ต')),
+            );
+        }
+    }
+}
 
   Future<void> fetchUserData() async {
     if (loggedInUserEmail != null) {
@@ -128,7 +124,6 @@ Future<bool> loginUser(BuildContext context) async {
       if (response.statusCode == 200) {
         userData = json.decode(response.body)['data'];
         print('${userData}');
-
       } else {
         print('Failed to fetch user data: ${response.statusCode}');
       }

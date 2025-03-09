@@ -42,24 +42,6 @@ class AddDevicePage extends StatelessWidget {
                   );
                 }
               },
-              // onPressed: () {
-              //   if (_controller.text.isNotEmpty) {
-              //     int? tankId =
-              //         int.tryParse(_controller.text); // ✅ แปลงเป็น int
-              //     if (tankId != null) {
-              //       Navigator.pop(context, tankId); // ✅ ส่ง tankId กลับ
-              //     } else {
-              //       ScaffoldMessenger.of(context).showSnackBar(
-              //         SnackBar(
-              //             content: Text('กรุณากรอกหมายเลขถังปลูกให้ถูกต้อง')),
-              //       );
-              //     }
-              //   } else {
-              //     ScaffoldMessenger.of(context).showSnackBar(
-              //       SnackBar(content: Text('กรุณากรอก ID ถังปลูก')),
-              //     );
-              //   }
-              // },
               style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromARGB(255, 126, 255, 165)),
               child: Text('บันทึก'),

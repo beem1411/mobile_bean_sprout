@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/constant/app_state.dart';
+import 'package:mobile/constant/auth_controller.dart';
+import 'package:mobile/constant/connection_controller.dart';
 import 'package:mobile/constant/history_controller.dart';
 import 'package:mobile/constant/settings_controller.dart';
 import 'package:mobile/screens/notification.dart';
@@ -15,6 +17,12 @@ class ScheduleTab extends StatefulWidget {
 class _ScheduleTabState extends State<ScheduleTab> {
   final HistoryController controller = HistoryController();
   final SettingsController setcontroller = SettingsController();
+  final AuthController authController = AuthController();
+  final ConnectionController cntController = ConnectionController();
+
+  int? userId;
+  String? tankId;
+
   DateTime? startDate;
   DateTime? endDate;
   TimeOfDay startTime = TimeOfDay(hour: 8, minute: 0);
@@ -23,13 +31,17 @@ class _ScheduleTabState extends State<ScheduleTab> {
   int wateringPeriod = 0;
   int soakTime = 0;
   int frequency = 0;
+
   //int round = 1;
 
   @override
   void initState() {
     super.initState();
     _defaultSettings();
+
   }
+
+
 
   void _defaultSettings() async {
     await setcontroller.fetchDefaultSettings();
@@ -96,6 +108,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 20),
               Text(
                 'กำหนดเวลาในการปลูกถั่วงอก',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -125,7 +138,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   onPressed: () async {
                     if (startDate != null && endDate != null) {
                       try {
-                        await historyController.saveHistory( 
+                        await historyController.saveHistory(
                           startDate: startDate!,
                           endDate: endDate!,
                           startTime: formatTime(startTime),

@@ -261,16 +261,6 @@ class _StepsTabState extends State<StepsTab> {
                       SizedBox(height: 20),
                     ],
                   ),
-                // แสดงเวลาเหลือในขั้นตอนที่ 21
-                // if (currentStep == 1)
-                // Column(
-                //   children: [
-                //     Text(
-                //       "เวลาที่เหลือ: ${_stRemaining.inHours.toString().padLeft(2, '0')}:${_stRemaining.inMinutes.remainder(60).toString().padLeft(2, '0')}:${_stRemaining.inSeconds.remainder(60).toString().padLeft(2, '0')}",
-                //       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                //     ),
-                //   ],
-                // ),
                 if (currentStep == 1)
                   Column(
                     children: [
@@ -354,23 +344,6 @@ class _StepsTabState extends State<StepsTab> {
                       // ในขั้นตอนที่ 2 จะไม่สามารถกดถัดไปได้จนกว่าจะครบ
                       if (isTimerComplete) {
                         nextStep();
-                        // String startDate =
-                        //     DateFormat('d/M/yy').format(appState.startDate!);
-                        // String endDate =
-                        //     DateFormat('d/M/yy').format(appState.endDate!);
-                        // if (appState.currentStep == 1) {
-                        //   String title =
-                        //       'ถั่วงอกรอบวันที่ $startDate - $endDate';
-                        //   String message = 'เริ่มรดน้ำถั่วงอกตามเงื่อนไข';
-                        //   // ✅ เพิ่มแจ้งเตือนใน ListView
-                        //   appState.addNotification(title, message);
-                        // } else if (appState.currentStep == 2) {
-                        //   String title =
-                        //       'ถั่วงอกรอบวันที่ $startDate - $endDate';
-                        //   String message = 'พร้อมเก็บเกี่ยวแล้ว';
-                        //   // ✅ เพิ่มแจ้งเตือนใน ListView
-                        //   appState.addNotification(title, message);
-                        // }
                       } else {
                         print('กรุณารอจนกว่าเวลาจะหมด');
                       }
@@ -401,8 +374,6 @@ class _StepsTabState extends State<StepsTab> {
                         'date': DateFormat('d/M/yy')
                             .format(appState.endDate!), //appState.endDate,
                         'status': 'เก็บแล้ว',
-                        // 'amountStart':
-                        //     int.tryParse(amountendController.text) ?? 0,
                       };
 
                       appState.endPlanting(endRecord);

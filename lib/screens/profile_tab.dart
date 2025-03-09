@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mobile/constant/auth_controller.dart';
 
@@ -59,7 +58,16 @@ class _ProfileTabState extends State<ProfileTab> {
                   ),
                   SizedBox(height: 30),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      try {
+                        await widget.authController.logout(context);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content:
+                                  Text('ออกจากระบบไม่สำเร็จ กรุณาลองใหม่')),
+                        );
+                      }
                       //logout
                     },
                     style: ElevatedButton.styleFrom(

@@ -82,8 +82,6 @@ class _DeviceInfoTabState extends State<DeviceInfoTab> {
                       "${infoController.humidity?.toStringAsFixed(1) ?? '-'} %"),
                   buildInfoCard(Icons.thermostat, "อุณหภูมิ",
                       "${infoController.temperature?.toStringAsFixed(1) ?? '-'} °C"),
-                  /*buildInfoCard(Icons.calendar_today, "วันที่ปลูก",
-                      "${starttime.day}/${starttime.month}/${starttime.year}"),*/
 
                   // เพิ่ม Switch การรดน้ำใต้ความชื้น
                   Row(

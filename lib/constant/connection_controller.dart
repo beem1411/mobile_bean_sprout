@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+
 class ConnectionController {
   Future<void> addDeviceToServer(String tankId, int userId) async {
     const String url = 'http://210.246.215.73:4000/connection';
@@ -31,4 +32,5 @@ class ConnectionController {
       print('❌ Error: $error');
     }
   }
+
 }

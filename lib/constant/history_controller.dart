@@ -15,7 +15,7 @@ class HistoryController with ChangeNotifier {
     required int wateringPeriod,
     required int round,
     required int soakTime,
-    required int frequency,
+    required int frequency, 
   }) async {
     final url = Uri.parse('http://210.246.215.73:4000/addhistory');
 
@@ -32,6 +32,7 @@ class HistoryController with ChangeNotifier {
         'round': round,
         'soakTime': soakTime,
         'frequency': frequency,
+
       }),
     );
 

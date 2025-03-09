@@ -16,44 +16,10 @@ class AppState extends ChangeNotifier {
   int frequeency = 0;
   Duration _stRemaining = Duration(seconds: 0);
   Timer? _timer;
-  // int? savedAmountStart;
-  // int? savedAmountEnd;
-
   double? savedAmountStart;
   double? savedAmountEnd;
-
-  // Duration _stRemaining = Duration(seconds: 0);
-  // bool _timerRunning = false;
-  // Timer? _timer;
-
-  // Duration get soakingTimeRemaining => _stRemaining;
-
-  //   void updateSoakingTime(int hours) {
-  //   _stRemaining = Duration(hours: hours);
-  //   notifyListeners();
-  // }
-
-  //   void startSoakingTimer() {
-  //   if (!_timerRunning) {
-  //     _timerRunning = true;
-  //     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-  //       if (_stRemaining.inSeconds > 0) {
-  //         _stRemaining -= Duration(seconds: 1);
-  //         notifyListeners();
-  //       } else {
-  //         _timer?.cancel();
-  //         _timerRunning = false;
-  //       }
-  //     });
-  //   }
-  // }
-
   Duration get soakingTimeRemaining => _stRemaining;
 
-  // void updateSoakingTime(int hours) {
-  //   _stRemaining = Duration(hours: hours);
-  //   notifyListeners();
-  // }
 
   void updateSoakingTime(int hours) {
     _stRemaining = Duration(hours: hours);

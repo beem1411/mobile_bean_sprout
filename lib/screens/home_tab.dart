@@ -18,17 +18,6 @@ class _HomeTabState extends State<HomeTab> {
     devices = [AddDeviceButton(onTap: navigateToAddPage)];
   }
 
-  // void navigateToAddPage() async {
-  //   final result = await Navigator.push(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => AddDevicePage()),
-  //   );
-
-  //   if (result != null && result is String && result.isNotEmpty) {
-  //     setState(() {
-  //       devices.insert(devices.length - 1, DeviceTile(deviceName: result));
-  //     });
-  //   }
 
 void navigateToAddPage() async {
   final userId = authController.userData?['userId'] ?? 0; // ✅ ดึง userId
